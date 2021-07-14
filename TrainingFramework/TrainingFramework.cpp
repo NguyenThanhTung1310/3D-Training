@@ -7,10 +7,32 @@
 #include "Shaders.h"
 #include "Globals.h"
 #include <conio.h>
+#include <iostream>
+
+const char* vertex_shader_source =
+			"#version 330 core\n"
+			"layout (location = 0) in vec3 position;\n"
+			"layout (location = 1) in vec3 color;\n"
+			"out vec3 vertexColor;\n"
+			"void main()\n"
+			"{\n"
+			"    gl_Position = vec4(position, 1.0);\n"
+			"    vertexColor = color;\n"
+			"}\n";
+
+const char* fragment_shader_source =
+			"#version 330 core\n"
+			"out vec4 fragColor;\n"
+			"in vec3 vertexColor;\n"
+			"void main()\n"
+			"{\n"
+			"     fragColor = vec4(vertexColor, 1.0f);\n"
+			"}\n";
 
 
-GLuint vboId, iboId;
+GLuint vboId[2], iboId;
 Shaders myShaders;
+
 
 int Init ( ESContext *esContext )
 {
@@ -23,18 +45,33 @@ int Init ( ESContext *esContext )
 	verticesData[1].pos.x = -0.5f;  verticesData[1].pos.y = -0.5f;  verticesData[1].pos.z =  0.0f;
 	verticesData[2].pos.x =  0.5f;  verticesData[2].pos.y = -0.5f;  verticesData[2].pos.z =  0.0f;
 	
-	unsigned int indices[] = { 0, 1, 2 };
+	Color color[3];
+
+	color[0].color.x = 1.0f;  color[0].color.y = 1.0f;  color[0].color.z = 0.0f;
+	color[1].color.x = 0.0f;  color[1].color.y = 1.0f;  color[1].color.z = 1.0f;
+	color[2].color.x = 1.0f;  color[2].color.y = 0.0f;  color[2].color.z = 1.0f;
+
+	int indices[] = { 0 ,1 ,2 };
+
 	//buffer object
-	glGenBuffers(1, &vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glGenBuffers(2, &vboId[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW);
+	//glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(verticesData), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
+	//glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(color), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
 
 	glGenBuffers(1, &iboId);
 	glBindBuffer(GL_ARRAY_BUFFER, iboId);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	
 	//creation of shaders and program 
 	return myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
 
@@ -46,14 +83,28 @@ void Draw ( ESContext *esContext )
 
 	glUseProgram(myShaders.program);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
 
 	
-	if(myShaders.positionAttribute != -1)
+	if (myShaders.positionAttribute != -1)
 	{
 		glEnableVertexAttribArray(myShaders.positionAttribute);
 		glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	
 	}
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboId[1]);
+
+	if (myShaders.colorAttribute != -1)
+	{
+		glEnableVertexAttribArray(myShaders.colorAttribute);
+		glVertexAttribPointer(myShaders.colorAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Color), 0);
+
+	}
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
@@ -75,7 +126,9 @@ void Key ( ESContext *esContext, unsigned char key, bool bIsPressed)
 
 void CleanUp()
 {
-	glDeleteBuffers(1, &vboId);
+	glDeleteBuffers(1, &vboId[0]);
+	glDeleteBuffers(1, &vboId[1]);
+	glDeleteBuffers(1, &iboId);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

@@ -1,5 +1,6 @@
 #include"stdafx.h"
 #include"Model.h"
+#include"Object.h"
 #include<iostream>
 
 void Model::initNFG(char* fileName) {
@@ -29,7 +30,6 @@ void Model::initNFG(char* fileName) {
 		veticalData[i].pos.z = posZ;
 		veticalData[i].u_v.x = uvX;
 		veticalData[i].u_v.y = uvY;
-		std::cout << veticalData[i].u_v.x << endl;
 		//listVerticalData.push_back(&veticalData[i]);
 	}
 	glGenBuffers(1, &this->m_vboId);

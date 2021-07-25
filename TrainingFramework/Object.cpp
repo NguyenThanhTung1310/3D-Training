@@ -6,22 +6,22 @@
 
 
 Matrix Object::setRotation() {
-	return Rz * Rx * Ry;
+	return rX * rY * rZ;
 }
 
-Matrix Object::setWordl() {
+Matrix Object::setWorld() {
 	return scale * rotation * trans;
 }
-void Object::InitObject() {
-	Rx.SetRotationX(0);
-	Ry.SetRotationY(3.14);
-	Rz.SetRotationZ(0);
+void Object::initObject() {
+	rX.SetRotationX(0);
+	rY.SetRotationY(3.14);
+	rZ.SetRotationZ(0);
 
 	scale.SetScale(1, 1, 1);
-	rotation = Rz * Rx * Ry;
+	rotation = rX * rY * rZ;
 	trans.SetTranslation(0.0, 0.0, 0.0);
 
-	wordl = scale * rotation * trans;
+	world = scale * rotation * trans;
 }
 
 Object::Object() {

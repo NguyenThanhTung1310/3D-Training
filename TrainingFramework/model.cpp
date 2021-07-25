@@ -7,7 +7,7 @@ void Model::initNFG(char* fileName) {
 
 	FILE* file;
 	file = fopen(fileName, "r");
-	if (file) std::cout << "load nfg thanh cong";
+	if (file) std::cout << "Loaded nfg successfully.";
 	int NrVertices, Nindices;
 	float posX, posY, posZ;
 	float normX, normY, normZ;
@@ -32,8 +32,8 @@ void Model::initNFG(char* fileName) {
 		veticalData[i].u_v.y = uvY;
 		//listVerticalData.push_back(&veticalData[i]);
 	}
-	glGenBuffers(1, &this->m_vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, this->m_vboId);
+	glGenBuffers(1, &this->vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vboId);
 	for (int i = 0; i < NrVertices; i++) {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)* NrVertices, veticalData, GL_STATIC_DRAW);
 	}
@@ -42,7 +42,7 @@ void Model::initNFG(char* fileName) {
 
 	fscanf(file, "NrIndices: %d\n", &Nindices);
 	int iX, iY, iZ;
-	numberOfIndice = Nindices;
+	numberOfIndices = Nindices;
 	int *indices = new int[Nindices];
 	for (int i = 0; i < Nindices; i += 3) {
 		fscanf(file, "%d. ", &id);
@@ -51,8 +51,8 @@ void Model::initNFG(char* fileName) {
 		indices[i + 1] = iY;
 		indices[i + 2] = iZ;
 	}
-	glGenBuffers(1, &this->m_iboID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->m_iboID);
+	glGenBuffers(1, &this->iboID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->iboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, Nindices * sizeof(int), indices, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

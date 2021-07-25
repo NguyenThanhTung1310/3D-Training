@@ -2,33 +2,33 @@
 #include"../Utilities/utilities.h"
 class Camera {
 public:
-	float speedCamera = 1.0f;
+	float cameraSpeed = 1.0f;
 	Vector3 position;
 	Vector3 target;
 	Vector3 up;
 	Vector3 Wup;
 	Vector3 right;
 
-	GLfloat m_FOV;
-	GLfloat m_near;
-	GLfloat m_far;
-	Matrix Rcm;
-	Matrix Tcm;
-	Matrix WCMR;
-	Matrix VCMR;
-	Matrix PCMR;
+	GLfloat FOV;
+	GLfloat front;
+	GLfloat back;
+	Matrix RotationCamera;
+	Matrix TransCamera;
+	Matrix WorldCamera;
+	Matrix ViewCamera;
+	Matrix PerspectiveCamera;
 	Matrix WVP;
 
-	Vector3 xasis;
-	Vector3 yasis;
-	Vector3 zasis;
-	void initCMR();
-	void updateCMR(float deltaTime);
-	void setRotationCMR();
-	void setTranslationCMR();
-	void setWorldMatrixCMR();
-	void setViewMatrixCMR();
-	void setPerspectiveMatrixCMR();
+	Vector3 xAxis;
+	Vector3 yAxis;
+	Vector3 zAxis;
+	void initCamera();
+	void updateCamera(float deltaTime);
+	void setRotationCamera();
+	void setTransCamera();
+	void setWorldMatrixCamera();
+	void setViewMatrixCamera();
+	void setPerspectiveMatrixCamera();
 	void setWVP();
-	void isPressKeyEvent(unsigned char key, float deltaTime);
+	void isKeyPressed(unsigned char key, float deltaTime);
 };

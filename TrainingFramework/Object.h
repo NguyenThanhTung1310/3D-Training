@@ -9,29 +9,27 @@ using namespace std;
 
 class Object {
 public:
-	vector<Object*> listObj;
-
-	Matrix Rx;
-	Matrix Ry;
-	Matrix Rz;
+	Matrix rX;
+	Matrix rY;
+	Matrix rZ;
 
 	Matrix scale;
 	Matrix rotation;
 	Matrix trans;
 
-	Matrix wordl;
+	Matrix world;
 	
 	Matrix WVP;
 
 
 	Matrix setRotation();
 
-	Matrix setWordl();
-	//Matrix setView();
+	Matrix setWorld();
+	Matrix setView();
 	
 
 
-	void InitObject();
+	void initObject();
 	Object();
 	~Object();
 
